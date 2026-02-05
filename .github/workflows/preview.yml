@@ -1,5 +1,6 @@
 name: Quarto Preview
-
+env:
+    PREVIEW_BRANCH: gh-pages
 on:
   pull_request:
     types:
@@ -73,10 +74,33 @@ jobs:
           PREVIEW_CHANGED_CHAPTERS: ${{ env.PREVIEW_CHANGED_CHAPTERS }}
 
       - name: Deploy PR Preview
-        uses: rossjrw/pr-preview-action@main
+        id: preview-step
+        if: github.event_name == 'pull_request'
+        uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: ./docs/
-          # Deploy on label changes too, not just open/reopen/synchronize
-          # The 'auto' action ignores label events, so we explicitly set 'deploy' for non-closed PRs
-          action: ${{ github.event.action == 'closed' && 'remove' || 'deploy' }}
-        
+          source-dir: docs
+          preview-branch: ${{ env.PREVIEW_BRANCH }}
+          comment: "false"
+          wait-for-pages-deployment: true
+
+      # following https://github.com/rossjrw/pr-preview-action?tab=readme-ov-file#customise-the-sticky-comment:
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: steps.preview-step.outputs.deployment-action == 'deploy' && env.deployment_status == 'success'
+        with:
+          header: pr-preview
+          recreate: true
+          message: |
+              [PR Preview Action](https://github.com/rossjrw/pr-preview-action) ${{ steps.preview-step.outputs.action-version }}
+              :---:
+              | <p><img src="https://qr.rossjrw.com/?url=${{ steps.preview-step.outputs.preview-url }}" height="100" align="right" alt="QR code for preview link"></p> :rocket: View preview at <br> ${{ steps.preview-step.outputs.preview-url }} <br><br>
+              | <h6>Built to branch [`${{ env.PREVIEW_BRANCH }}`](${{ github.server_url }}/${{ github.repository }}/tree/${{ env.PREVIEW_BRANCH }}) at ${{ steps.preview-step.outputs.action-start-time }}. <br> Preview will be ready when the [GitHub Pages deployment](${{ github.server_url }}/${{ github.repository }}/deployments) is complete. <br><br> </h6>
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: steps.preview-step.outputs.deployment-action == 'remove' && env.deployment_status == 'success'
+        with:
+            header: pr-preview
+            message: |
+                [PR Preview Action](https://github.com/rossjrw/pr-preview-action) ${{ steps.preview-step.outputs.action-version }}
+                :---:
+                Preview removed because the pull request was closed.
+                ${{ steps.preview-step.outputs.action-start-time }}

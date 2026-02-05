@@ -1,5 +1,6 @@
 name: Quarto Preview
-
+env:
+    PREVIEW_BRANCH: gh-pages
 on:
   pull_request:
     types:

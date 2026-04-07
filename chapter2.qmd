@@ -25,13 +25,20 @@ $$
 
 ## Figures
 
-You can include images by placing them in the `images/` directory:
+You can create figures using R code chunks. For example, @fig-example shows the relationship between car weight and fuel efficiency.
 
-```markdown
-![Example image caption](images/your-image.png){#fig-example}
+```{r}
+#| label: fig-example
+#| fig-cap: "Relationship between weight and miles per gallon"
+#| code-fold: true
+
+library(ggplot2)
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(x = "Weight (1000 lbs)", y = "Miles per Gallon")
 ```
-
-Then reference the figure in text using `@fig-example`.
 
 ## Callouts
 

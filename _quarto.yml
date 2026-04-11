@@ -32,7 +32,7 @@ format:
       - macros/macros.qmd
   pdf:
     include-in-header:
-      - macros/macros.qmd
+      - macros-pdf.tex
     geometry:
       - top=15mm
       - bottom=20mm

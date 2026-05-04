@@ -110,11 +110,21 @@
     ]
   },
   {
+    "objectID": "chapter2.html#custom-macros",
+    "href": "chapter2.html#custom-macros",
+    "title": "2  Chapter 2: Advanced Topics",
+    "section": "2.2 Custom Macros",
+    "text": "2.2 Custom Macros\nThis book uses the d-morrison/macros submodule to provide convenient LaTeX shorthand for statistical and mathematical notation.\n\n2.2.1 Probability and Distributions\nThe normal distribution \\(\\Normal\\paren{\\m, \\ss}\\) can be written using macros as $\\Normal\\paren{\\m, \\ss}$, where \\m expands to \\(\\mu\\) and \\ss expands to \\(\\sigma^2\\).\nA random variable \\(X \\dist \\Normal\\paren{\\mu, \\sigma^2}\\) has expectation \\(\\E{X} = \\mu\\) and variance \\(\\Var{X} = \\sigma^2\\).\n\n\n2.2.2 Regression Notation\nIn linear regression, we estimate \\(\\vbeta\\) using ordinary least squares. The fitted values are \\(\\hy = \\mX \\hb\\), where \\(\\hb = \\inv{\\mX' \\mX} \\mX' \\vy\\).\nThe standard error of \\(\\hb\\) is \\(\\hse{\\hb} = \\hs \\sqrt{\\inv{\\mX' \\mX}}\\).\n\n\n2.2.3 Likelihood and Estimation\nThe log-likelihood function \\(\\llik(\\th)\\) is maximized at the MLE \\(\\hth_{\\text{ML}}\\).\nThe score function is \\(\\score(\\th) = \\deriv{\\th} \\llik(\\th)\\) and the observed information is \\(\\oinf(\\th) = -\\hess(\\th)\\).\n\n\n2.2.4 Logistic Regression\nThe logit link function is \\(\\logitf{\\pi} = \\logt\\paren{\\frac{\\pi}{1 - \\pi}}\\) and its inverse is \\(\\expitf{\\eta} = \\frac{e^\\eta}{1 + e^\\eta}\\).",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Chapter 2: Advanced Topics</span>"
+    ]
+  },
+  {
     "objectID": "chapter2.html#tables",
     "href": "chapter2.html#tables",
     "title": "2  Chapter 2: Advanced Topics",
-    "section": "2.2 Tables",
-    "text": "2.2 Tables\n\n\n\nTable 2.1: Example table caption\n\n\n\n\n\nColumn 1\nColumn 2\nColumn 3\n\n\n\n\nData 1\nData 2\nData 3\n\n\nData 4\nData 5\nData 6",
+    "section": "2.3 Tables",
+    "text": "2.3 Tables\n\n\n\nTable 2.1: Example table caption\n\n\n\n\n\nColumn 1\nColumn 2\nColumn 3\n\n\n\n\nData 1\nData 2\nData 3\n\n\nData 4\nData 5\nData 6",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Chapter 2: Advanced Topics</span>"
     ]
@@ -123,8 +133,8 @@
     "objectID": "chapter2.html#figures",
     "href": "chapter2.html#figures",
     "title": "2  Chapter 2: Advanced Topics",
-    "section": "2.3 Figures",
-    "text": "2.3 Figures\nYou can include images by placing them in the images/ directory:\n![Example image caption](images/your-image.png){#fig-example}\nThen reference the figure in text using @fig-example.",
+    "section": "2.4 Figures",
+    "text": "2.4 Figures\nYou can include images by placing them in the images/ directory:\n![Example image caption](images/your-image.png){#fig-example}\nThen reference the figure in text using @fig-example.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Chapter 2: Advanced Topics</span>"
     ]
@@ -133,8 +143,8 @@
     "objectID": "chapter2.html#callouts",
     "href": "chapter2.html#callouts",
     "title": "2  Chapter 2: Advanced Topics",
-    "section": "2.4 Callouts",
-    "text": "2.4 Callouts\n\n\n\n\n\n\nNote\n\n\n\nThis is a note callout. Use it to highlight important information.\n\n\n\n\n\n\n\n\nTip\n\n\n\nThis is a tip callout. Share helpful suggestions with your readers.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThis is a warning callout. Alert readers to potential issues.\n\n\n\n\n\n\n\n\nImportant\n\n\n\nThis is an important callout. Emphasize critical information.",
+    "section": "2.5 Callouts",
+    "text": "2.5 Callouts\n\n\n\n\n\n\nNote\n\n\n\nThis is a note callout. Use it to highlight important information.\n\n\n\n\n\n\n\n\nTip\n\n\n\nThis is a tip callout. Share helpful suggestions with your readers.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThis is a warning callout. Alert readers to potential issues.\n\n\n\n\n\n\n\n\nImportant\n\n\n\nThis is an important callout. Emphasize critical information.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Chapter 2: Advanced Topics</span>"
     ]

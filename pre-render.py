@@ -10,13 +10,13 @@ import re
 src = "macros/macros.qmd"
 dst = "macros-pdf.tex"
 
-with open(src) as f:
+with open(src, encoding="utf-8") as f:
     content = f.read()
 
 # Remove HTML comments (<!-- ... -->) which are invalid in LaTeX preambles
 content = re.sub(r"<!--.*?-->", "", content, flags=re.DOTALL)
 
-with open(dst, "w") as f:
+with open(dst, "w", encoding="utf-8") as f:
     f.write(content)
 
 print(f"Generated {dst} from {src}")

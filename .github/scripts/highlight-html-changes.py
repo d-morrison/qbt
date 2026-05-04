@@ -275,8 +275,7 @@ class HTMLDiffer:
                     # We escape the element for regex safety; use a lambda for the replacement
                     # to avoid re interpreting backslash sequences (e.g. \N) in highlighted_elem
                     escaped_elem = re.escape(new_elem)
-                    _repl = highlighted_elem
-                    highlighted_new_html = re.sub(escaped_elem, lambda m: _repl, highlighted_new_html, count=1)
+                    highlighted_new_html = re.sub(escaped_elem, lambda m: highlighted_elem, highlighted_new_html, count=1)
                     changes_made += 1
             
             elif (best_match_idx is None or best_ratio < SIMILARITY_THRESHOLD_MIN) and new_text:
@@ -291,8 +290,7 @@ class HTMLDiffer:
                     # Replace in the HTML using regex with escaping; use a lambda for the replacement
                     # to avoid re interpreting backslash sequences (e.g. \N) in highlighted_elem
                     escaped_elem = re.escape(new_elem)
-                    _repl = highlighted_elem
-                    highlighted_new_html = re.sub(escaped_elem, lambda m: _repl, highlighted_new_html, count=1)
+                    highlighted_new_html = re.sub(escaped_elem, lambda m: highlighted_elem, highlighted_new_html, count=1)
                     changes_made += 1
         
         return highlighted_new_html, changes_made

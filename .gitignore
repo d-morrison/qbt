@@ -47,7 +47,6 @@ MANIFEST
 
 # TeX (LaTeX intermediate files)
 *.tex
-!macros-pdf.tex
 *.aux
 *.log
 *.toc

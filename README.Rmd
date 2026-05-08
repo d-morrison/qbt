@@ -321,10 +321,6 @@ Add your custom styles to `styles.css`. These will override the default theme st
 
 This template is released under the [CC0 1.0 Universal License](LICENSE), which means you can freely use, modify, and distribute it without any restrictions.
 
-## Acknowledgments
-
-This template is based on the structure of the [UCD-SERG Lab Manual](https://github.com/UCD-SERG/lab-manual), which was adapted from the [Benjamin-Chung Lab Manual](https://jadebc.github.io/lab-manual/index.html).
-
 ## Support
 
 - [Quarto Documentation](https://quarto.org/docs/guide/)

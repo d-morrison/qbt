@@ -14,6 +14,32 @@ $$
 \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
 $$
 
+## Custom Macros
+
+This book uses the [`d-morrison/macros`](https://github.com/d-morrison/macros) submodule to provide convenient LaTeX shorthand for statistical and mathematical notation.
+
+### Probability and Distributions
+
+The normal distribution $\Normal\paren{\m, \ss}$ can be written using macros as `$\Normal\paren{\m, \ss}$`, where `\m` expands to $\mu$ and `\ss` expands to $\sigma^2$.
+
+A random variable $X \dist \Normal\paren{\mu, \sigma^2}$ has expectation $\E{X} = \mu$ and variance $\Var{X} = \sigma^2$.
+
+### Regression Notation
+
+In linear regression, we estimate $\vbeta$ using ordinary least squares. The fitted values are $\hy = \mX \hb$, where $\hb = \inv{\mX' \mX} \mX' \vy$.
+
+The standard error of $\hb$ is $\hse{\hb} = \hs \sqrt{\inv{\mX' \mX}}$.
+
+### Likelihood and Estimation
+
+The log-likelihood function $\llik(\th)$ is maximized at the MLE $\hth_{\text{ML}}$.
+
+The score function is $\score(\th) = \deriv{\th} \llik(\th)$ and the observed information is $\oinf(\th) = -\hess(\th)$.
+
+### Logistic Regression
+
+The logit link function is $\logitf{\pi} = \logt\paren{\frac{\pi}{1 - \pi}}$ and its inverse is $\expitf{\eta} = \frac{e^\eta}{1 + e^\eta}$.
+
 ## Tables
 
 | Column 1 | Column 2 | Column 3 |

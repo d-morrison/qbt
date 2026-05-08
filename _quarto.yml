@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: docs
+  pre-render: pre-render.py
 
 book:
   title: "Your Book Title"
@@ -30,7 +31,11 @@ format:
     toc: true
     number-sections: true
     embed-resources: false
+    include-in-header:
+      - macros/macros.qmd
   pdf:
+    include-in-header:
+      - macros-pdf.tex
     geometry:
       - top=15mm
       - bottom=20mm

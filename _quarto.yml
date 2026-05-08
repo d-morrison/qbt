@@ -2,6 +2,8 @@ project:
   type: book
   output-dir: docs
   pre-render: pre-render.py
+  resources:
+    - macros/macros.qmd
 
 book:
   title: "Your Book Title"
@@ -32,7 +34,7 @@ format:
     number-sections: true
     embed-resources: false
     include-in-header:
-      - macros-html.html
+      - macros-header.html
   pdf:
     include-in-header:
       - macros-pdf.tex

@@ -111,6 +111,190 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script>
+(function () {
+  (function forceRevealMathJax3() {
+    const prior = Object.prototype.hasOwnProperty.call(window, "RevealMath")
+      ? window.RevealMath
+      : undefined;
+
+    let revealMathValue;
+    Object.defineProperty(window, "RevealMath", {
+      configurable: true,
+      enumerable: true,
+      get() {
+        return revealMathValue;
+      },
+      set(value) {
+        if (value && typeof value.MathJax3 === "function") {
+          revealMathValue = value.MathJax3();
+        } else {
+          revealMathValue = value;
+        }
+      },
+    });
+
+    if (prior !== undefined) {
+      window.RevealMath = prior;
+    }
+  })();
+
+  const macroSources = ["macros.qmd", "macros/macros.qmd"];
+
+  function extractBraceContent(text, startIndex) {
+    if (text[startIndex] !== "{") return null;
+    let depth = 0;
+    const isEscaped = (index) => {
+      let backslashes = 0;
+      for (let j = index - 1; j >= 0 && text[j] === "\\"; j -= 1) backslashes += 1;
+      return backslashes % 2 === 1;
+    };
+
+    for (let i = startIndex; i < text.length; i += 1) {
+      const ch = text[i];
+      if (ch === "{" && !isEscaped(i)) depth += 1;
+      if (ch === "}" && !isEscaped(i)) {
+        depth -= 1;
+        if (depth === 0) {
+          return { content: text.slice(startIndex + 1, i), nextIndex: i + 1 };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function parseDef(line, macros) {
+    if (!line.startsWith("\\def\\")) return false;
+
+    let index = "\\def\\".length;
+    let name = "";
+
+    while (index < line.length && !/[\s{]/.test(line[index])) {
+      name += line[index];
+      index += 1;
+    }
+
+    while (index < line.length && /\s/.test(line[index])) index += 1;
+    const body = extractBraceContent(line, index);
+    if (!name || !body) return false;
+
+    const argMatches = [...body.content.matchAll(/#(\d+)/g)].map((m) => Number(m[1]));
+    const argc = argMatches.length ? Math.max(...argMatches) : 0;
+    macros[name] = argc > 0 ? [body.content, argc] : body.content;
+    return true;
+  }
+
+  function parseCommand(line, macros) {
+    const commandMatch = line.match(/^\\(providecommand|newcommand|renewcommand)/);
+    if (!commandMatch) return false;
+
+    let index = commandMatch[0].length;
+    while (index < line.length && /\s/.test(line[index])) index += 1;
+
+    const nameBlock = extractBraceContent(line, index);
+    if (!nameBlock || !nameBlock.content.startsWith("\\")) return false;
+    const name = nameBlock.content.slice(1);
+    index = nameBlock.nextIndex;
+
+    while (index < line.length && /\s/.test(line[index])) index += 1;
+
+    let argc = 0;
+    if (line[index] === "[") {
+      const close = line.indexOf("]", index + 1);
+      if (close === -1) return false;
+      argc = Number(line.slice(index + 1, close)) || 0;
+      index = close + 1;
+    }
+
+    while (index < line.length && /\s/.test(line[index])) index += 1;
+
+    const body = extractBraceContent(line, index);
+    if (!body) return false;
+
+    macros[name] = argc > 0 ? [body.content, argc] : body.content;
+    return true;
+  }
+
+  function parseMacros(sourceText) {
+    const macros = {};
+
+    for (const rawLine of sourceText.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith("%") || line.startsWith("<!--")) continue;
+
+      if (parseDef(line, macros)) continue;
+      parseCommand(line, macros);
+    }
+
+    return macros;
+  }
+
+  async function loadMacroSource() {
+    for (const path of macroSources) {
+      try {
+        const response = await fetch(path, { cache: "default" });
+        if (response.ok) return await response.text();
+      } catch (_) {
+        // try next path
+      }
+    }
+
+    throw new Error("Unable to load macros.qmd from known paths");
+  }
+
+  function applyMacros(parsed) {
+    window.MathJax = window.MathJax || {};
+
+    window.MathJax.tex = window.MathJax.tex || {};
+    window.MathJax.tex.macros = Object.assign({}, window.MathJax.tex.macros || {}, parsed);
+
+    window.MathJax.TeX = window.MathJax.TeX || {};
+    window.MathJax.TeX.Macros = Object.assign({}, window.MathJax.TeX.Macros || {}, parsed);
+
+    if (window.MathJax.Hub && window.MathJax.Hub.Config) {
+      window.MathJax.Hub.Config({ TeX: { Macros: window.MathJax.TeX.Macros } });
+    }
+  }
+
+  window.MathJax = window.MathJax || {};
+  window.MathJax.delayStartupUntil = window.MathJax.delayStartupUntil || "configured";
+  window.MathJax.startup = window.MathJax.startup || {};
+
+  const sourcePromise = loadMacroSource();
+  const priorReady = window.MathJax.startup.ready;
+
+  window.MathJax.startup.ready = async () => {
+    try {
+      applyMacros(parseMacros(await sourcePromise));
+    } catch (error) {
+      console.warn("[macros-header] Failed to load macros.qmd for MathJax:", error);
+    }
+
+    if (typeof priorReady === "function") {
+      return priorReady();
+    }
+
+    if (window.MathJax.startup.defaultReady) {
+      return window.MathJax.startup.defaultReady();
+    }
+  };
+
+  sourcePromise
+    .then((sourceText) => {
+      applyMacros(parseMacros(sourceText));
+      if (window.MathJax.Hub && window.MathJax.Hub.Configured) {
+        window.MathJax.Hub.Configured();
+      }
+    })
+    .catch((error) => {
+      console.warn("[macros-header] Failed to load macros.qmd for MathJax:", error);
+      if (window.MathJax.Hub && window.MathJax.Hub.Configured) {
+        window.MathJax.Hub.Configured();
+      }
+    });
+})();
+</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>

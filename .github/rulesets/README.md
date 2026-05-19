@@ -24,7 +24,12 @@ Applies to the default branch:
 
 - **Required PR before merging** — no direct pushes to `main`.
 - **Required status checks** (not strict — branch does not need to be up
-  to date): link-checker, Spellcheck, check-chars, build-deploy.
+  to date): Spellcheck, check-chars, build-deploy. The `build-deploy`
+  context is produced by `preview.yml` on PRs (publish.yml only runs on
+  push-to-main, so it can't satisfy this); if you rename either job, the
+  ruleset gate will hang. `check-links.yml` is intentionally excluded —
+  it currently runs on a weekly schedule, not on PRs, and would otherwise
+  block every merge.
 - **No force-pushes, no branch deletion.**
 - **Bypass** in `pull_request` mode for the Maintain role (role id 2) —
   Maintainers can merge via a PR they authored, but cannot push directly.

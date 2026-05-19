@@ -7,6 +7,7 @@ This compares the PR's DOCX files with the published versions from gh-pages.
 import os
 import sys
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 
 def checkout_base_docx(base_ref='origin/gh-pages', target_dir='/tmp/base-docx'):
@@ -61,35 +62,39 @@ def create_docx_with_tracked_changes(old_docx_path, new_docx_path, output_path):
         from docx.opc.constants import RELATIONSHIP_TYPE as RT
         import difflib
         import shutil
-        
+
+        # Use the PR author from GitHub Actions env if available, else a generic label
+        revision_author = os.getenv('GITHUB_ACTOR', 'PR Preview')
+        revision_date = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
         # First, copy the new document to the output path
         shutil.copy2(new_docx_path, output_path)
-        
+
         # Load the output document
         output_doc = Document(output_path)
-        
+
         # Enable track changes in the document settings
         settings = output_doc.settings
         settings_element = settings.element
-        
+
         # Add trackRevisions element if it doesn't exist
         track_revisions = settings_element.find(qn('w:trackRevisions'))
         if track_revisions is None:
             track_revisions = OxmlElement('w:trackRevisions')
             settings_element.append(track_revisions)
-        
+
         # Load old and new documents for comparison
         old_doc = Document(old_docx_path)
         new_doc = Document(new_docx_path)
-        
+
         # Get paragraphs from both documents
         old_paragraphs = [p.text for p in old_doc.paragraphs]
         new_paragraphs = [p.text for p in new_doc.paragraphs]
-        
+
         # Use difflib to find differences at paragraph level
         matcher = difflib.SequenceMatcher(None, old_paragraphs, new_paragraphs)
         has_changes = False
-        
+
         # Process each operation
         for tag, i1, i2, j1, j2 in matcher.get_opcodes():
             if tag == 'replace':
@@ -104,16 +109,16 @@ def create_docx_with_tracked_changes(old_docx_path, new_docx_path, output_path):
                             # Create an insertion revision mark
                             ins = OxmlElement('w:ins')
                             ins.set(qn('w:id'), str(idx))
-                            ins.set(qn('w:author'), 'PR Preview')
-                            ins.set(qn('w:date'), '2024-01-01T00:00:00Z')
-                            
+                            ins.set(qn('w:author'), revision_author)
+                            ins.set(qn('w:date'), revision_date)
+
                             # Wrap the run's content in the insertion mark
                             run_element = run._element
                             parent = run_element.getparent()
                             parent.insert(parent.index(run_element), ins)
                             parent.remove(run_element)
                             ins.append(run_element)
-                            
+
             elif tag == 'insert':
                 # New paragraphs were added
                 has_changes = True
@@ -124,8 +129,8 @@ def create_docx_with_tracked_changes(old_docx_path, new_docx_path, output_path):
                         for run in para.runs:
                             ins = OxmlElement('w:ins')
                             ins.set(qn('w:id'), str(1000 + idx))
-                            ins.set(qn('w:author'), 'PR Preview')
-                            ins.set(qn('w:date'), '2024-01-01T00:00:00Z')
+                            ins.set(qn('w:author'), revision_author)
+                            ins.set(qn('w:date'), revision_date)
                             
                             run_element = run._element
                             parent = run_element.getparent()
@@ -166,7 +171,8 @@ def create_docx_with_tracked_changes(old_docx_path, new_docx_path, output_path):
             shutil.copy2(new_docx_path, output_path)
             print(f"  ✓ Copied DOCX without tracked changes as fallback")
             return True
-        except:
+        except Exception as copy_err:
+            print(f"  ✗ Could not copy DOCX as fallback: {copy_err}", file=sys.stderr)
             return False
 
 def process_docx_file(new_docx_path, base_docx_dir):

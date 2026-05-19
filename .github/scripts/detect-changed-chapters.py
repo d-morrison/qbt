@@ -27,41 +27,44 @@ def checkout_base_files(base_ref='origin/gh-pages', target_dir='/tmp/base-files'
     try:
         # Fetch the gh-pages branch
         result = subprocess.run(
-            ['git', 'fetch', 'origin', 'gh-pages:gh-pages'], 
-            check=False, 
+            ['git', 'fetch', 'origin', 'gh-pages:gh-pages'],
+            check=False,
             capture_output=True,
-            text=True
+            text=True,
+            timeout=30
         )
-        
+
         if result.returncode != 0:
             print(f"Could not fetch gh-pages branch: {result.stderr}")
             print("This is expected for:")
             print("  - First PR to a new repository")
             print("  - Repositories not using gh-pages for deployment")
             return None
-        
+
         # List all HTML and DOCX files in gh-pages
         result = subprocess.run(
             ['git', 'ls-tree', '-r', '--name-only', base_ref],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
+            timeout=30
         )
-        
+
         if result.returncode == 0:
-            files = [f for f in result.stdout.split('\n') 
+            files = [f for f in result.stdout.split('\n')
                     if f.endswith('.html') or f.endswith('.docx')]
-            
+
             # Extract each file
             for file in files:
                 output_path = target_path / file
                 output_path.parent.mkdir(parents=True, exist_ok=True)
-                
+
                 with open(output_path, 'wb') as f:
                     subprocess.run(
                         ['git', 'show', f'{base_ref}:{file}'],
                         stdout=f,
-                        check=False
+                        check=False,
+                        timeout=30
                     )
             
             return target_path if files else None
@@ -81,7 +84,8 @@ def files_differ(file1, file2):
     try:
         with open(file1, 'rb') as f1, open(file2, 'rb') as f2:
             return f1.read() != f2.read()
-    except Exception:
+    except Exception as e:
+        print(f"Warning: could not compare {file1} and {file2}: {e}", file=sys.stderr)
         return True
 
 def main():

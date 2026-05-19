@@ -272,9 +272,10 @@ class HTMLDiffer:
                     highlighted_elem = f'{open_tag}{highlighted_inner}{close_tag}'
                     
                     # Replace in the HTML - use a unique marker to ensure we replace the right instance
-                    # We escape the element for regex safety
+                    # We escape the element for regex safety; use a lambda for the replacement
+                    # to avoid re interpreting backslash sequences (e.g. \N) in highlighted_elem
                     escaped_elem = re.escape(new_elem)
-                    highlighted_new_html = re.sub(escaped_elem, highlighted_elem, highlighted_new_html, count=1)
+                    highlighted_new_html = re.sub(escaped_elem, lambda m: highlighted_elem, highlighted_new_html, count=1)
                     changes_made += 1
             
             elif (best_match_idx is None or best_ratio < SIMILARITY_THRESHOLD_MIN) and new_text:
@@ -286,9 +287,10 @@ class HTMLDiffer:
                     # Mark the entire element as new, but preserve the inner HTML
                     highlighted_elem = f'{open_tag}<mark class="preview-element-added">{inner_content}</mark>{close_tag}'
                     
-                    # Replace in the HTML using regex with escaping
+                    # Replace in the HTML using regex with escaping; use a lambda for the replacement
+                    # to avoid re interpreting backslash sequences (e.g. \N) in highlighted_elem
                     escaped_elem = re.escape(new_elem)
-                    highlighted_new_html = re.sub(escaped_elem, highlighted_elem, highlighted_new_html, count=1)
+                    highlighted_new_html = re.sub(escaped_elem, lambda m: highlighted_elem, highlighted_new_html, count=1)
                     changes_made += 1
         
         return highlighted_new_html, changes_made

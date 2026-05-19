@@ -46,8 +46,13 @@ def add_home_page_banner(index_html_path, changed_chapters):
         
         links_html = ', '.join(chapter_links)
         
-        # Add DOCX link to the banner
-        docx_filename = "UCD-SeRG-Lab-Manual-tracked-changes.docx"
+        # Find the DOCX file with tracked changes
+        docx_files = list(index_html_path.parent.glob('*-tracked-changes.docx'))
+        if docx_files:
+            docx_filename = docx_files[0].name
+        else:
+            # Fallback to a generic name if no tracked changes DOCX found
+            docx_filename = "tracked-changes.docx"
         
         banner = f'''
 <div class="preview-home-changes-banner">

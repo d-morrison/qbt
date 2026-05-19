@@ -1,6 +1,9 @@
 project:
   type: book
   output-dir: docs
+  pre-render: pre-render.py
+  resources:
+    - macros/macros.qmd
 
 book:
   title: "Your Book Title"
@@ -15,6 +18,8 @@ book:
     - chapter1.qmd
     - chapter2.qmd
     - references.qmd
+  appendices:
+    - appendix-document-metadata.qmd
   page-navigation: true
 
 bibliography: references.bib
@@ -28,7 +33,11 @@ format:
     toc: true
     number-sections: true
     embed-resources: false
+    include-in-header:
+      - macros-header.html
   pdf:
+    include-in-header:
+      - macros-pdf.tex
     geometry:
       - top=15mm
       - bottom=20mm

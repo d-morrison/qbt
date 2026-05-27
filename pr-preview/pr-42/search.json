@@ -154,7 +154,7 @@
     "href": "appendix-document-metadata.html",
     "title": "Document Generation Metadata",
     "section": "",
-    "text": "This document was generated from the following git commit:\n\nBranch: add-reprexes-skill\nCommit: cc9fd3d\nFull commit hash: cc9fd3d46585e2f5dd04a653d3ab7e0316c780e1\nCommit date: 2026-05-27 04:05:47 +0000\n\nWhen transferring edits from this document back to the Quarto source files, use this commit information to set up the PR correctly and account for any commits that have been added since this document was generated.",
+    "text": "This document was generated from the following git commit:\n\nBranch: add-reprexes-skill\nCommit: 83b742c\nFull commit hash: 83b742c3d35ca831ce7ba1fa2b5af1b96d75fce8\nCommit date: 2026-05-27 04:27:15 +0000\n\nWhen transferring edits from this document back to the Quarto source files, use this commit information to set up the PR correctly and account for any commits that have been added since this document was generated.",
     "crumbs": [
       "Appendices",
       "Document Generation Metadata"

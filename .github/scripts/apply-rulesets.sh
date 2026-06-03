@@ -10,6 +10,8 @@
 
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || { echo "error: jq is required but not found" >&2; exit 1; }
+
 repo="${1:-$(gh repo view --json nameWithOwner -q .nameWithOwner)}"
 ruleset_dir="$(cd "$(dirname "$0")/../rulesets" && pwd)"
 
@@ -26,6 +28,10 @@ existing=$(gh api "repos/$repo/rulesets" --jq '[.[] | {name, id}]')
 
 for f in "${files[@]}"; do
   name=$(jq -r .name "$f")
+  if [ -z "$name" ] || [ "$name" = "null" ]; then
+    echo "skipping $f: missing .name field" >&2
+    continue
+  fi
   id=$(jq -r --arg n "$name" 'map(select(.name == $n)) | .[0].id // empty' <<<"$existing")
   if [ -n "$id" ]; then
     echo "updating ruleset '$name' (id $id) on $repo"

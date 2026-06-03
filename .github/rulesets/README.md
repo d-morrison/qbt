@@ -22,7 +22,11 @@ Requirements:
 
 Applies to the default branch:
 
-- **Required PR before merging** — no direct pushes to `main`.
+- **Required PR before merging** — no direct pushes to `main`. Note that
+  `required_approving_review_count` is `0`: a PR is required, but **zero
+  approvals** are needed, so authors can self-merge. This enforces process
+  (PR + status checks) but not peer review. Raise this value if you want to
+  require approvals before merge.
 - **Required status checks** (not strict — branch does not need to be up
   to date): Spellcheck, check-chars, build-deploy. The `build-deploy`
   context is produced by `preview.yml` on PRs (publish.yml only runs on
@@ -41,7 +45,10 @@ the live repo. Or edit in the GitHub UI (Settings → Rules → Rulesets) and
 re-export with:
 
 ```sh
-gh api repos/OWNER/REPO/rulesets/RULESET_ID \
+# Find the ruleset ID:
+RULESET_ID=$(gh api repos/OWNER/REPO/rulesets | jq '.[] | select(.name == "main") | .id')
+
+gh api "repos/OWNER/REPO/rulesets/$RULESET_ID" \
   | jq 'del(.id, .node_id, .source, .source_type, .created_at, .updated_at, ._links, .current_user_can_bypass)' \
   > .github/rulesets/main.json
 ```

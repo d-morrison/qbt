@@ -13,6 +13,7 @@ allowed-tools:
   - Read
   - Write
   - Edit
+  - Glob
 ---
 
 # reprexes
@@ -74,9 +75,9 @@ but nothing more.
 5. **Iterate fixes on the reprex**, not the full app. This is the fast loop
    the whole technique exists to create.
 6. **Port the fix back** to the real code and verify it there.
-7. **Clean up.** Delete the scratch file (it lives in `/tmp`, so it never
-   touches the repo). If the bug was subtle, consider promoting the reprex
-   into a real regression test (`testthat`) instead of discarding it.
+7. **Clean up.** Don't commit the scratch file — keep it in `/tmp` (or a
+   gitignored scratch path). If the bug was subtle, consider promoting the
+   reprex into a real regression test (`testthat`) instead of discarding it.
 
 ## Minimizing the data
 
@@ -113,8 +114,8 @@ but nothing more.
   - `std_out_err = TRUE` — capture stdout/stderr too (e.g. `system()` /
     subprocess or C-level output that doesn't come back as normal R results).
   - `wd =` — set the working directory when the code needs one.
-  - Validation bonus: because `reprex()` runs in a fresh session, if it errors
-    on a missing object or package, your example wasn't actually
+  - **Self-containment check:** because `reprex()` runs in a fresh session, if
+    it errors on a missing object or package, your example wasn't actually
     self-contained — fix that before sharing.
 
   Companion helpers handle "wild-caught" reprexes (all exported in reprex

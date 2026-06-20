@@ -31,9 +31,10 @@ Applies to the default branch:
   to date): Spellcheck, check-chars, build-deploy. The `build-deploy`
   context is produced by `preview.yml` on PRs (publish.yml only runs on
   push-to-main, so it can't satisfy this); if you rename either job, the
-  ruleset gate will hang. `check-links.yml` is intentionally excluded —
-  it currently runs on a weekly schedule, not on PRs, and would otherwise
-  block every merge.
+  ruleset gate will hang. `check-links.yml` is intentionally excluded — it checks external URLs,
+  which can fail due to transient network issues or link rot unrelated to
+  the PR. Requiring it as a merge gate would block merges on external
+  failures outside the PR author's control.
 - **No force-pushes, no branch deletion.**
 - **Bypass** in `pull_request` mode for the Maintain role (role id 2) —
   Maintainers can merge via a PR they authored, but cannot push directly.

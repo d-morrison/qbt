@@ -118,8 +118,9 @@ publishes your book to GitHub Pages when you push to the main branch.
     deletion, requires a PR to merge, and gates the merge on the
     configured CI checks (Spellcheck, check-chars, build-deploy). A PR
     is required but **zero approvals** are needed, so authors can
-    self-merge; raise `required_approving_review_count` in `main.json`
-    to require approvals. See `.github/rulesets/README.md` for details.
+    self-merge; raise `required_approving_review_count` in
+    `.github/rulesets/main.json` to require approvals. See
+    `.github/rulesets/README.md` for details.
 
 3.  **Push to main branch**:
 

@@ -11,6 +11,7 @@
 set -euo pipefail
 
 command -v jq >/dev/null 2>&1 || { echo "error: jq is required but not found" >&2; exit 1; }
+command -v gh >/dev/null 2>&1 || { echo "error: gh is required but not found" >&2; exit 1; }
 
 repo="${1:-$(gh repo view --json nameWithOwner -q .nameWithOwner)}"
 ruleset_dir="$(cd "$(dirname "$0")/../rulesets" && pwd)"
@@ -24,7 +25,7 @@ fi
 
 # Map of existing ruleset name -> id, so we can PUT updates instead of
 # creating duplicates.
-existing=$(gh api "repos/$repo/rulesets" --jq '[.[] | {name, id}]')
+existing=$(gh api --paginate "repos/$repo/rulesets" | jq -s '[.[][] | {name, id}]')
 
 for f in "${files[@]}"; do
   name=$(jq -r .name "$f")

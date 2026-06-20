@@ -14,6 +14,7 @@ allowed-tools:
   - Write
   - Edit
   - Glob
+  - Grep
 ---
 
 # reprexes

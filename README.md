@@ -258,6 +258,8 @@ Automatically checks that all URLs in your book are reachable:
 - **Reports**: Workflow fails if broken links are detected. Check the
   workflow logs for details on which links are broken.
 - **Configuration**: Customize behavior in `lychee.toml`
+- **Manual override**: Add the `links checked by hand` label to a PR to
+  skip the automated link check
 
 To manually trigger the link checker:
 
@@ -350,13 +352,6 @@ theme styles.
 This template is released under the [CC0 1.0 Universal
 License](LICENSE), which means you can freely use, modify, and
 distribute it without any restrictions.
-
-## Acknowledgments
-
-This template is based on the structure of the [UCD-SERG Lab
-Manual](https://github.com/UCD-SERG/lab-manual), which was adapted from
-the [Benjamin-Chung Lab
-Manual](https://jadebc.github.io/lab-manual/index.html).
 
 ## Support
 

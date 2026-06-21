@@ -62,6 +62,7 @@ but nothing more.
    `/tmp/reprex.R`, or a tiny `/tmp/reprex.qmd` for a render bug; on a
    non-Unix machine use `tempfile(fileext = ".R")` / `tempdir()` for a
    portable path). Put in it, in order:
+
    - the package loads (`library(...)`),
    - the minimal data (see tactics below),
    - the minimal code that triggers the phenomenon, with a comment marking
@@ -102,6 +103,7 @@ but nothing more.
   `tempfile(fileext = ".R")` path on non-Unix machines) — handy from a
   non-interactive CLI session where there's no clipboard. Use it when the
   output is destined for a PR comment or an upstream issue. Useful arguments:
+
   - `venue =` — output format:
     - `"gh"` — GitHub-flavored Markdown (default)
     - `"so"` / `"ds"` — Stack Overflow / Discourse

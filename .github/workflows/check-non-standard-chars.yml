@@ -1,0 +1,14 @@
+# Flags curly quotes and en/em dashes in source files, via the reusable workflow
+# in d-morrison/gha. Pinned to the @v2 moving major tag.
+name: Check Non-Standard Characters
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: d-morrison/gha/.github/workflows/check-non-standard-chars.yml@v2

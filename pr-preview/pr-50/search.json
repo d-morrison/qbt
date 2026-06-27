@@ -154,7 +154,7 @@
     "href": "appendix-document-metadata.html",
     "title": "Document Generation Metadata",
     "section": "",
-    "text": "This document was generated from the following git commit:\n\nBranch: chore/migrate-ci-to-gha-49\nCommit: 8db4bec\nFull commit hash: 8db4bec4915907081efbbd965e0db3fa827b8920\nCommit date: 2026-06-26 16:58:56 -0700\n\nWhen transferring edits from this document back to the Quarto source files, use this commit information to set up the PR correctly and account for any commits that have been added since this document was generated.",
+    "text": "This document was generated from the following git commit:\n\nBranch: chore/migrate-ci-to-gha-49\nCommit: b6de256\nFull commit hash: b6de2563cace3c80d864b462deeaeca29e071364\nCommit date: 2026-06-27 00:05:53 +0000\n\nWhen transferring edits from this document back to the Quarto source files, use this commit information to set up the PR correctly and account for any commits that have been added since this document was generated.",
     "crumbs": [
       "Appendices",
       "Document Generation Metadata"

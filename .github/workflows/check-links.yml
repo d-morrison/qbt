@@ -1,6 +1,11 @@
 # Validates URLs in the docs with lychee, via the reusable workflow in
-# d-morrison/gha. PR runs are read-only; main/scheduled runs may file a tracking
-# issue. On PRs, add the `links checked by hand` label to skip.
+# d-morrison/gha. On main/scheduled runs it may file a broken-links tracking
+# issue; on PRs add the `links checked by hand` label to skip.
+#
+# Single job (per gha's example): the reusable link-checker job declares
+# `issues: write`, and a reusable workflow's permissions must be <= the caller's,
+# so the caller must grant issues: write even though issue-filing only happens on
+# main. (A split read-only-PR / writable-main caller startup-fails for this reason.)
 #
 # Pinned to the @v2 moving major tag.
 name: Check Links
@@ -14,22 +19,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  # PR runs only read the skip-label and the tree — token stays read-only.
-  links-pr:
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: read
-    uses: d-morrison/gha/.github/workflows/check-links.yml@v2
-    with:
-      lychee-config: lychee.toml
-
-  # main / scheduled / manual runs may file the broken-links tracking issue.
-  links-main:
-    if: github.event_name != 'pull_request'
+  check:
     permissions:
       contents: read
       issues: write
+      pull-requests: read
     uses: d-morrison/gha/.github/workflows/check-links.yml@v2
     with:
       lychee-config: lychee.toml

@@ -32,8 +32,8 @@ jobs:
       pr-number: ${{ inputs.pr_number }}
       checkout-submodules: true
       prompt-addendum: |
-        This is a Quarto book template following UCD-SERG standards, so
-        also prioritize:
+        In addition to standard code review checks, this is a Quarto
+        book template following UCD-SERG standards, so also prioritize:
 
         1. **Quarto / prose correctness**
            - `.qmd` syntax: chunk options use `#|` directives, fenced

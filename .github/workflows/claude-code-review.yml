@@ -27,6 +27,7 @@ jobs:
     uses: d-morrison/gha/.github/workflows/claude-code-review.yml@v2
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
     with:
       pr-number: ${{ inputs.pr_number }}
       checkout-submodules: true

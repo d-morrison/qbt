@@ -1,5 +1,5 @@
 # Validates URLs in the docs with lychee, via the reusable workflow in
-# d-morrison/gha. On main/scheduled runs it may file a broken-links tracking
+# Morrison-Lab/gha. On main/scheduled runs it may file a broken-links tracking
 # issue; on PRs add the `links checked by hand` label to skip.
 #
 # Single job (per gha's example): the reusable link-checker job declares
@@ -24,6 +24,6 @@ jobs:
       contents: read
       issues: write
       pull-requests: read
-    uses: d-morrison/gha/.github/workflows/check-links.yml@v2
+    uses: Morrison-Lab/gha/.github/workflows/check-links.yml@v2
     with:
       lychee-config: lychee.toml

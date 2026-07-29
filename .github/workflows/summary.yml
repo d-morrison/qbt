@@ -1,5 +1,5 @@
 # AI-generated summary comment on newly opened issues, via the reusable workflow
-# in d-morrison/gha. Uses GitHub Models (the `models: read` grant), no extra secret.
+# in Morrison-Lab/gha. Uses GitHub Models (the `models: read` grant), no extra secret.
 #
 # Pinned to the @v2 moving major tag.
 name: Issue Summary
@@ -14,4 +14,4 @@ jobs:
       contents: read
       issues: write
       models: read
-    uses: d-morrison/gha/.github/workflows/summary.yml@v2
+    uses: Morrison-Lab/gha/.github/workflows/summary.yml@v2

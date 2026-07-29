@@ -108,7 +108,21 @@ publishes your book to GitHub Pages when you push to the main branch.
     - Go to Settings → Pages
     - Under “Build and deployment”, set Source to “GitHub Actions”
 
-2.  **Push to main branch**:
+2.  **Apply branch rulesets** (requires admin access):
+
+    ``` bash
+    .github/scripts/apply-rulesets.sh
+    ```
+
+    This protects `main` against direct pushes / force-pushes /
+    deletion, requires a PR to merge, and gates the merge on the
+    configured CI checks (Spellcheck, check-chars, build-deploy). A PR
+    is required but **zero approvals** are needed, so authors can
+    self-merge; raise `required_approving_review_count` in
+    `.github/rulesets/main.json` to require approvals. See
+    `.github/rulesets/README.md` for details.
+
+3.  **Push to main branch**:
 
     ``` bash
     git add .
@@ -116,9 +130,9 @@ publishes your book to GitHub Pages when you push to the main branch.
     git push origin main
     ```
 
-3.  **Wait for the workflow** to complete (check the Actions tab)
+4.  **Wait for the workflow** to complete (check the Actions tab)
 
-4.  **Access your book** at:
+5.  **Access your book** at:
     `https://YOUR-USERNAME.github.io/YOUR-REPO/`
 
 ## GitHub Actions Workflows

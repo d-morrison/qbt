@@ -1,7 +1,8 @@
 # Calls the reusable Claude review workflow in Morrison-Lab/gha. The
 # workflow_dispatch path lets claude.yml re-dispatch a review after an @claude
-# run pushes commits — keep this file named claude-code-review.yml.
+# run pushes commits, and also allows manual re-review from the Actions UI.
 #
+# qbt keeps its repo-specific review guidance here as prompt-addendum input.
 # Pinned to the @v2 moving major tag.
 name: Claude Code Review
 
@@ -26,11 +27,39 @@ jobs:
     uses: Morrison-Lab/gha/.github/workflows/claude-code-review.yml@v2
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
     with:
       pr-number: ${{ inputs.pr_number }}
       checkout-submodules: true
       prompt-addendum: |
-        **Post line-specific findings as inline review comments** anchored to the
-        relevant line(s) — use the inline-comment tool, not a prose list in the
-        summary. Reserve the top-level summary comment for a brief overall verdict
-        plus any finding not tied to a specific line.
+        In addition to standard code review checks, this is a Quarto
+        book template following UCD-SERG standards, so also prioritize:
+
+        1. **Quarto / prose correctness**
+           - `.qmd` syntax: chunk options use `#|` directives, fenced
+             blocks are balanced, cross-refs (`@fig-`, `@tbl-`, `@sec-`)
+             resolve to defined labels.
+           - Bullet-list rule: 3+ items use bullets with a blank line above.
+           - `code-fold: true` on chunks where the output (not the code)
+             is the point; avoid on tutorial code.
+
+        2. **R code** (`.lintr.R` is authoritative)
+           - snake_case names, line length ≤ 80 chars.
+           - No new package dependencies without justification — every
+             dependency added here lands in every downstream book.
+
+        3. **Build hygiene**
+           - No accidental commits of `_site/`, `_freeze/`, or `.quarto/`.
+           - `README.md` is generated; edits should go to `README.Rmd`.
+           - Bibliography entries in `references.bib` are well-formed BibTeX.
+
+        4. **CI / template impact**
+           - Workflow changes don't break the publish/preview pipelines.
+           - Spell-check / link-check failures are fixed at the source,
+             not suppressed.
+
+        **Post line-specific findings as inline review comments** anchored to
+        the relevant line(s) — use the inline-comment tool, not a prose list
+        in the summary. Reserve the top-level summary comment for a brief
+        overall verdict plus any finding not tied to a specific line. Skip
+        generic praise.

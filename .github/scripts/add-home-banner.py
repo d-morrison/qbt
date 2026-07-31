@@ -102,12 +102,12 @@ def main():
         else:
             print("No changed chapters found")
     
-    # Add banner to ALL HTML files in the directory, not just index.html
-    html_files = list(html_dir.glob('*.html'))
-    print(f"Found {len(html_files)} HTML files to process")
-    
-    for html_file in html_files:
-        add_home_page_banner(html_file, changed_chapters)
+    # Add banner only to index.html (the home page)
+    index_html = html_dir / 'index.html'
+    if index_html.exists():
+        add_home_page_banner(index_html, changed_chapters)
+    else:
+        print(f"Warning: index.html not found in {html_dir}", file=sys.stderr)
 
 if __name__ == '__main__':
     main()
